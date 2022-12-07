@@ -1,5 +1,4 @@
 #include <cstdlib>
-#include <fstream>
 #include <iostream>
 
 #include "robots.h"
@@ -71,7 +70,8 @@ private:
 extern "C" __attribute__((unused)) int LLVMFuzzerTestOneInput(const uint8_t *fuzz_data, size_t size) {
     FuzzedDataProvider fdp(fuzz_data, size);
 
-    const absl::string_view robots_txt{fdp.ConsumeRandomLengthString()};
+    const std::string robots_str = fdp.ConsumeRandomLengthString();
+    const absl::string_view robots_txt{robots_str};
     const auto user_agent = fdp.ConsumeRandomLengthString();
     const auto url = fdp.ConsumeRemainingBytesAsString();
 
