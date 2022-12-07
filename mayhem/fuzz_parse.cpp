@@ -9,6 +9,7 @@
 googlebot::RobotsMatcher matcher{};
 
 bool IsUserAgentAllowed(const absl::string_view &robots_txt, const std::string& user_agent, const std::string& url) {
+    googlebot::RobotsMatcher::IsValidUserAgentToObey(user_agent);
     return matcher.OneAgentAllowedByRobots(robots_txt, user_agent, url);
 }
 class RobotsStatsReporter : public googlebot::RobotsParseHandler {
@@ -78,5 +79,6 @@ extern "C" __attribute__((unused)) int LLVMFuzzerTestOneInput(const uint8_t *fuz
     IsUserAgentAllowed(robots_txt, user_agent, url);
     RobotsStatsReporter reporter;
     googlebot::ParseRobotsTxt(robots_txt, &reporter);
+
     return 0;
 }
