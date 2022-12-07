@@ -51,6 +51,7 @@ SET(CPACK_SOURCE_IGNORE_FILES
 OPTION(ROBOTS_BUILD_STATIC "If ON, robots will build also the static library" ON)
 OPTION(ROBOTS_BUILD_TESTS "If ON, robots will build test targets" OFF)
 OPTION(ROBOTS_INSTALL "If ON, enable the installation of the targets" ON)
+OPTION(ROBOTS_FUZZ "If ON, robots will be instrumented and a fuzzing harness will be built" OFF)
 
 ############ helper libs ############
 
@@ -87,6 +88,7 @@ ENDIF(MSVC)
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_BINARY_DIR}/libs/abseil-cpp-src
                  ${CMAKE_CURRENT_BINARY_DIR}/libs/abseil-cpp-build
                  EXCLUDE_FROM_ALL)
+
 
 IF(ROBOTS_BUILD_TESTS)
     INCLUDE(CTest)
@@ -172,3 +174,8 @@ IF(ROBOTS_BUILD_TESTS)
     ADD_TEST(NAME robots-test COMMAND robots-test)
 ENDIF(ROBOTS_BUILD_TESTS)
 
+IF(ROBOTS_FUZZ)
+    ADD_COMPILE_OPTIONS(-fsanitize=fuzzer-no-link,address,undefined)
+    ADD_LINK_OPTIONS(-fsanitize=fuzzer-no-link,address,undefined)
+    ADD_SUBDIRECTORY(mayhem)
+ENDIF()
