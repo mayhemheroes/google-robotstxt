@@ -1,10 +1,10 @@
 #include <cstdlib>
 #include <iostream>
+#include <fuzzer/FuzzedDataProvider.h>
 
 #include "robots.h"
 #include "absl/strings/string_view.h"
 
-#include "FuzzedDataProvider.h"
 
 googlebot::RobotsMatcher matcher{};
 
