@@ -1,5 +1,5 @@
 # Build Stage
-FROM --platform=linux/amd64 ubuntu:22.04 as builder
+FROM --platform=linux/amd64 ubuntu:22.04 AS builder
 
 ## Install build dependencies.
 RUN apt-get update && \
@@ -11,7 +11,7 @@ WORKDIR /robotstxt
 
 ## Build
 RUN mkdir build && cd build && \
-    cmake .. -DROBOTS_FUZZ=On && \
+    cmake .. -DROBOTS_FUZZ=On -DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_FLAGS="-std=c++17" && \
     make -j$(nproc)
 
 # Package Stage
